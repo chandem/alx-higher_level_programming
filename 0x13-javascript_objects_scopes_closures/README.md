@@ -1,2 +1,2 @@
-# Javascript - Objects, Scopes and and Closures
+# Javascript - Objects, Scopes  and Closures
  ________________

@@ -1,25 +1,25 @@
 #!/usr/bin/node
-// retrieves all character names in SW film
+//Here is the script in JavaScript that will print out all the characters of a Star Wars movie:
+
 const request = require('request');
-const FILM_URL = `http://swapi.co/api/films/${process.argv[2]}`;
-let characters;
-const dict = {};
-request(FILM_URL, function (error, response, body) {
-  if (error) {
-    throw new Error(error);
-  }
-  characters = JSON.parse(body).characters;
-  for (const url of characters) {
-    request(url, (error, response, body) =>
-      !error && addData(url, JSON.parse(body).name));
+
+const movieId = process.argv[2];
+const apiUrl = `https://swapi.dev/api/films/${movieId}/`;
+
+request(apiUrl, (error, response, body) => {
+  if (!error && response.statusCode === 200) {
+    const film = JSON.parse(body);
+    const characters = film.characters;
+    characters.forEach(characterUrl => {
+      request(characterUrl, (error, response, body) => {
+        if (!error && response.statusCode === 200) {
+          const character = JSON.parse(body);
+          console.log(character.name);
+        }
+      });
+    });
   }
 });
 
-function addData (url, name) {
-  dict[url] = name;
-  if (Object.entries(dict).length === characters.length) {
-    for (const url of characters) {
-      console.log(dict[url]);
-    }
-  }
-}
+
+ 
